@@ -48,8 +48,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t YOUR_DOCKER_USERNAME/cinab-backend-spring-app:${{ github.sha }} .
-          docker push YOUR_DOCKER_USERNAME/cinab-backend-spring-app:${{ github.sha }}
+          docker build -t agure1996/cinab-backend-spring-app:${{ github.sha }} .
+          docker push agure1996/cinab-backend-spring-app:${{ github.sha }}
 
       - name: Logout from Docker Hub
         run: docker logout
