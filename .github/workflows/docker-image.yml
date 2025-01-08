@@ -23,11 +23,10 @@ jobs:
           java-package: jdk
           architecture: x64
           check-latest: false
-          distribution: temurin  # Change this to 'temurin'
-          server-id: github
-          server-username: GITHUB_ACTOR
-          server-password: GITHUB_TOKEN
-          overwrite-settings: true  # or 'zulu', 'amazon-corretto', etc.
+          distribution: temurin  # Set to 'temurin' for OpenJDK distributions
+
+      - name: Build the project with Maven
+        run: mvn clean install -DskipTests
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -47,9 +46,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: |
-          docker build -t agure1996/cinab-backend-spring-app:${{ github.sha }} .
-          docker push agure1996/cinab-backend-spring-app:${{ github.sha }}
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/cinab-backend-spring-app:latest .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/cinab-backend-spring-app:latest
 
       - name: Logout from Docker Hub
         run: docker logout
