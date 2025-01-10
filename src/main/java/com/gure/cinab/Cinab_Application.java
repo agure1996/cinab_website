@@ -8,8 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 public class Cinab_Application {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Cinab_Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Cinab_Application.class, args);
+    }
 
 }
+
