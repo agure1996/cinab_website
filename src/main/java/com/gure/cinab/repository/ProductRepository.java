@@ -30,7 +30,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @param brand the brand name to filter products by
      * @return a list of products belonging to the specified brand
      */
-    List<Product> findByBrandName(String brand);
+    List<Product> findByBrand(String brand);
+
 
     /**
      * Finds all products by the specified category and brand.

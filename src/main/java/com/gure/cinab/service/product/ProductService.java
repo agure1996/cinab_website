@@ -96,7 +96,6 @@ public class ProductService implements IProductService {
      */
     private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
         existingProduct.setName(request.getName());
-        existingProduct.setCategory(request.getCategory());
         existingProduct.setBrand(request.getBrand());
         existingProduct.setPrice(request.getPrice());
         existingProduct.setInventory(request.getInventory());
@@ -121,7 +120,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrandName(brand);
+        return productRepository.findByBrand(brand);
     }
 
     @Override
