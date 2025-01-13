@@ -19,4 +19,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
      * @return the {@link Category} entity matching the given name, or {@code null} if no such category exists
      */
     Category findByName(String name);
+
+    boolean existsByName(String name);
 }
