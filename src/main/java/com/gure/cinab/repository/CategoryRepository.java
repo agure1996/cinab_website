@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Provides data access methods for performing CRUD operations on {@link Category} objects.
  * Extends {@link JpaRepository} to leverage built-in JPA operations.
  *
- * @since 1.0
+ * @since 1.0.0
  */
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
