@@ -1,5 +1,21 @@
 # Cinab Website - Changelog
 
+### Patch Notes: Version 1.0.6 (Current)
+
+**Key Updates:**
+
+1. **Created Image Controller Contract and Implementation**
+   - Added `IImageController` interface to define the contract for image-related endpoints.
+   - Implemented `ImageController` class to handle CRUD operations for images, including:
+     - **Uploading Images (`saveImages`)**: Handles multiple image file uploads and associates them with a product.
+     - **Downloading Images (`downloadImage`)**: Allows downloading an image by its ID.
+     - **Updating Images (`updateImage`)**: Updates an existing image's content by its ID.
+     - **Deleting Images (`deleteImage`)**: Deletes an image by its ID.
+
+2. **Preparation for Product and Category Controllers**
+   - Prepared the groundwork for upcoming functionality in the product and category controllers.
+   - Ensured services and endpoints are modular and ready for extension.
+
 ## Version 1.0.5 (January 12, 2025)
 
 - **Fixes**:
