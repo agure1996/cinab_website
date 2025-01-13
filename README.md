@@ -1,6 +1,6 @@
 # Cinab Website - Changelog
 
-## Version 1.0.5 (January 11, 2025)
+## Version 1.0.5 (January 12, 2025)
 
 - **Fixes**:
     - Fixed bug in `saveImages` method for handling multiple image uploads in the `IImageService` interface. Ensured that each image receives a download URL and is correctly stored in the database.
