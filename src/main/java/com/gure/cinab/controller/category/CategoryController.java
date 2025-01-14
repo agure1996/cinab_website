@@ -14,13 +14,13 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("{api.prefix}/categories")
+@RequestMapping("${api.prefix}/categories")
 public class CategoryController implements ICategoryController {
 
     private final ICategoryService categoryService; // Dependency injection for category service
 
     @Override
-    @GetMapping("/all")
+    @GetMapping(value = "/all" , produces = "application/json")
     public ResponseEntity<ApiResponse> getAllCategories() {
         try {
             // Retrieve a list of all categories
@@ -34,7 +34,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @PostMapping("/category/add")
+    @PostMapping(value = "/category/add", produces = "application/json")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category name) {
         try {
             // Add a new category
@@ -48,7 +48,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @GetMapping("/category/{id}")
+    @GetMapping(value = "/category/{id}" , produces = "application/json")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         try {
             // Fetch a category by its ID
@@ -62,7 +62,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @GetMapping("/category/{name}")
+    @GetMapping(value = "/category/{name}" , produces = "application/json")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         try {
             // Fetch a category by its name
@@ -76,7 +76,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @DeleteMapping("/category/{id}/delete")
+    @DeleteMapping(value = "/category/{id}/delete" , produces = "application/json")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
             // Delete the category by ID
@@ -90,7 +90,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @PutMapping("/category/{id}/update")
+    @PutMapping(value = "/category/{id}/update" , produces = "application/json")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         try {
             // Update the category details

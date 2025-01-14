@@ -19,13 +19,13 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("{api.prefix}/images")
+@RequestMapping("${api.prefix}/images")
 public class ImageController implements IImageController {
 
     private final IImageService imageService;
 
     @Override
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload" , produces = "application/json")
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
         try {
             // Delegate the file upload and association with product to the service layer
@@ -39,7 +39,7 @@ public class ImageController implements IImageController {
     }
 
     @Override
-    @GetMapping("/image/download/{imageId}")
+    @GetMapping(value = "/image/download/{imageId}" , produces = "application/json")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         // Retrieve the image from the service layer
         Image image = imageService.getImageById(imageId);
@@ -55,7 +55,7 @@ public class ImageController implements IImageController {
     }
 
     @Override
-    @PutMapping("/image/{imageId}/update")
+    @PutMapping(value = "/image/{imageId}/update" , produces = "application/json" )
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {
         try {
             // Check if the image exists before updating
@@ -75,7 +75,7 @@ public class ImageController implements IImageController {
     }
 
     @Override
-    @DeleteMapping("/image/{imageId}/delete")
+    @DeleteMapping(value = "/image/{imageId}/delete" , produces = "application/json")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
             // Check if the image exists before attempting to delete

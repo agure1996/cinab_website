@@ -7,6 +7,8 @@ import com.gure.cinab.request.ProductUpdateRequest;
 import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.product.IProductService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,34 +19,38 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("{api.prefix}/products")  // API endpoint with versioning or prefix
+
+@RequestMapping("${api.prefix}/products")  // API endpoint with versioning or prefix
 public class ProductController implements IProductController {
+
 
     private final IProductService productService;  // Injecting the product service
 
     @Override
-    @GetMapping("/all")
+    @GetMapping(value = "/all", produces = "application/json")
     public ResponseEntity<ApiResponse> getAllProducts() {
         try {
             List<Product> productsList = productService.getAllProducts();  // Fetching all products
-            return ResponseEntity.ok(new ApiResponse("Found products!", productsList));  // Successful response
-        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(new ApiResponse("Found products!", productsList));  // Successful response
+        } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));  // Handling error if products not found
         }
     }
 
     @Override
-    @GetMapping("product/{productId}")
+    @GetMapping(value = "product/{productId}", produces = "application/json")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         try {
             Product theProduct = productService.getProductById(productId);  // Fetching product by ID
             return ResponseEntity.ok(new ApiResponse("Success! ", theProduct));  // Successful response
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));  // Handling error if product not found
         }
     }
 
-    @Override
+    @Override// Temporarily remove restriction
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest newProduct) {
         try {
@@ -56,7 +62,7 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    @PutMapping("/product/{productId}/update")
+    @PutMapping(value = "/product/{productId}/update", produces = "application/json")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest product) {
         try {
             // Updating product details
@@ -70,7 +76,7 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    @DeleteMapping("/product/{productId}/delete")
+    @DeleteMapping(value = "/product/{productId}/delete", produces = "application/json")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {
             // Delete the product by ID
@@ -84,7 +90,7 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    @GetMapping("/products/by/brand-and-name")
+    @GetMapping(value = "/products/by/brand-and-name", produces = "application/json")
     public ResponseEntity<ApiResponse> getProductByBrandAndName(@RequestParam String brandName, @RequestParam String productName) {
         try {
             // Fetch products based on both brand and name
@@ -96,12 +102,13 @@ public class ProductController implements IProductController {
             return ResponseEntity.ok(new ApiResponse("Success!", products));  // Successful response
         } catch (Exception e) {
             // Handling other random error cases
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error",e.getMessage()));  // Generic error handling
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));  // Generic error handling
         }
     }
+
     @Override
-    @GetMapping("/products/by/category-and-brand")
-    public ResponseEntity<ApiResponse> getProductByCategoryAndBrand( @RequestParam String category, @RequestParam String brand) {
+    @GetMapping(value = "/products/by/category-and-brand", produces = "application/json")
+    public ResponseEntity<ApiResponse> getProductByCategoryAndBrand(@RequestParam String category, @RequestParam String brand) {
         try {
             // Fetch products based on both brand and category
             List<Product> products = productService.getProductsByCategoryAndBrand(category, brand);
@@ -112,12 +119,12 @@ public class ProductController implements IProductController {
             return ResponseEntity.ok(new ApiResponse("Success!", products));  // Successful response
         } catch (Exception e) {
             // Handling other random error cases
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error",e.getMessage()));  // Generic error handling
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", e.getMessage()));  // Generic error handling
         }
     }
 
     @Override
-    @GetMapping("/products/{name}/products")
+    @GetMapping(value = "/products/{name}/products", produces = "application/json")
     public ResponseEntity<ApiResponse> getProductByName(@PathVariable String name) {
         try {
             // Fetch products based on product name
@@ -134,7 +141,7 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    @GetMapping("/products/by-brand")
+    @GetMapping(value = "/products/by-brand", produces = "application/json")
     public ResponseEntity<ApiResponse> getProductByBrand(@RequestParam String brand) {
         try {
             // Fetch products based on brand
@@ -151,7 +158,18 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    @GetMapping("/products/{category}/all/products")
+    @GetMapping(value = "/product/count/by-/and-name", produces = "application/json")
+    public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brand, @RequestParam String name) {
+        try {
+            var productCount = productService.countProductsByBrandAndName(brand, name);
+            return ResponseEntity.ok(new ApiResponse("Total products: ", productCount));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @Override
+    @GetMapping(value = "/products/{category}/all/products", produces = "application/json")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) {
         try {
             // Fetch products based on category
@@ -161,7 +179,7 @@ public class ProductController implements IProductController {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No product found!", null));  // Error response
             }
             return ResponseEntity.ok(new ApiResponse("Success!", products));  // Successful response
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             // Handling error if products are not found for category
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));  // Error response
         }

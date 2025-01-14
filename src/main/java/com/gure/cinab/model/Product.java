@@ -1,5 +1,6 @@
 package com.gure.cinab.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -74,6 +75,7 @@ public class Product {
      * The product's category is defined by the category associated with it.
      */
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
     @JoinColumn(name = "category_id")
     private Category category;
 

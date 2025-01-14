@@ -101,4 +101,6 @@ public interface IProductController {
      * @return a {@link ResponseEntity<ApiResponse>} containing a list of products from the specified brand.
      */
     ResponseEntity<ApiResponse> getProductByBrand(String brand);
+
+    ResponseEntity<ApiResponse> countProductsByBrandAndName(String brand, String name);
 }
