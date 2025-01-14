@@ -1,5 +1,6 @@
 package com.gure.cinab.service.product;
 
+import com.gure.cinab.dto.ProductDTO;
 import com.gure.cinab.model.Product;
 import com.gure.cinab.request.AddProductRequest;
 import com.gure.cinab.request.ProductUpdateRequest;
@@ -103,4 +104,21 @@ public interface IProductService {
      * @return the count of products matching the specified brand and name
      */
     Long countProductsByBrandAndName(String brand, String name);
+
+
+    /**
+     * Converts a product and maps to a DTO format .
+     *
+     * @param product the product to be converted
+     * @return the converted product as a DTO
+     */
+    ProductDTO convertToDTO(Product product);
+
+    /**
+     * retrieves a list of converted products to DTO .
+     *
+     * @param products the products as a list to be converted
+     * @return streams a list of converted products
+     */
+    List<ProductDTO> getConvertedProducts(List<Product> products);
 }

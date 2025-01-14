@@ -28,6 +28,12 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.modelmapper.extensions</groupId>
+			<artifactId>modelmapper-spring</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 		<!-- Spring Boot Test Starter for unit and integration tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

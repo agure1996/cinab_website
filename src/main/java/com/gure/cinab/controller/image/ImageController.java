@@ -8,9 +8,16 @@ import com.gure.cinab.service.image.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,11 +32,14 @@ public class ImageController implements IImageController {
     private final IImageService imageService;
 
     @Override
-    @PostMapping(value = "/upload" , produces = "application/json")
-    public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
+    @PostMapping("/upload")
+    public ResponseEntity<ApiResponse> uploadImages(@RequestParam Long productId, @RequestParam List<MultipartFile> files ) {
         try {
+            if (files.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("No image provided", null));
+            }
             // Delegate the file upload and association with product to the service layer
-            List<ImageDTO> imageDTOS = imageService.saveImages(files, productId);
+            List<ImageDTO> imageDTOS = imageService.saveImages( productId,files);
             return ResponseEntity.ok(new ApiResponse("Upload Success", imageDTOS));
         } catch (Exception e) {
             // Handle any exceptions during upload
@@ -38,24 +48,36 @@ public class ImageController implements IImageController {
         }
     }
 
+
     @Override
-    @GetMapping(value = "/image/download/{imageId}" , produces = "application/json")
+    @Transactional
+    @GetMapping("/image/download/{imageId}")
     public ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException {
         // Retrieve the image from the service layer
         Image image = imageService.getImageById(imageId);
+        Blob blob = image.getImage();
+        if (blob == null) {
+            throw new ResourceNotFoundException("Image blob is null for imageId: " + imageId);
+        }
+        long blobLength = ((java.sql.Blob) blob).length();
+        if (blobLength > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Blob size exceeds maximum allowed size for imageId: " + imageId);
+        }
+        ByteArrayResource resource = new ByteArrayResource(blob.getBytes(1, (int) blobLength));
+
 
         // Convert the image blob into a ByteArrayResource for streaming
-        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
+//        ByteArrayResource resource = new ByteArrayResource(image.getImage().getBytes(1, (int) image.getImage().length()));
 
         // Prepare and return the response entity with the image file
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(image.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment: filename=\"" + image.getFileName() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFileName() + "\"")
                 .body(resource);
     }
 
     @Override
-    @PutMapping(value = "/image/{imageId}/update" , produces = "application/json" )
+    @PutMapping("/image/{imageId}/update")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {
         try {
             // Check if the image exists before updating
@@ -75,7 +97,7 @@ public class ImageController implements IImageController {
     }
 
     @Override
-    @DeleteMapping(value = "/image/{imageId}/delete" , produces = "application/json")
+    @DeleteMapping("/image/{imageId}/delete")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
             // Check if the image exists before attempting to delete

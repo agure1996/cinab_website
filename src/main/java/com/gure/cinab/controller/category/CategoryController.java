@@ -20,7 +20,7 @@ public class CategoryController implements ICategoryController {
     private final ICategoryService categoryService; // Dependency injection for category service
 
     @Override
-    @GetMapping(value = "/all" , produces = "application/json")
+    @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllCategories() {
         try {
             // Retrieve a list of all categories
@@ -34,7 +34,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @PostMapping(value = "/category/add", produces = "application/json")
+    @PostMapping("/category/add")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category name) {
         try {
             // Add a new category
@@ -48,7 +48,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @GetMapping(value = "/category/{id}" , produces = "application/json")
+    @GetMapping("/category/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
         try {
             // Fetch a category by its ID
@@ -62,7 +62,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @GetMapping(value = "/category/{name}" , produces = "application/json")
+    @GetMapping("/category/{name}")
     public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
         try {
             // Fetch a category by its name
@@ -76,7 +76,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @DeleteMapping(value = "/category/{id}/delete" , produces = "application/json")
+    @DeleteMapping("/category/{id}/delete")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
             // Delete the category by ID
@@ -90,7 +90,7 @@ public class CategoryController implements ICategoryController {
     }
 
     @Override
-    @PutMapping(value = "/category/{id}/update" , produces = "application/json")
+    @PutMapping("/category/{id}/update")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         try {
             // Update the category details

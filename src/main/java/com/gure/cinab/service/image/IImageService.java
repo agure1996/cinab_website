@@ -37,13 +37,13 @@ public interface IImageService {
      * for each saved image and returns a list of {@link ImageDTO} objects representing
      * the saved images with their metadata.
      *
-     * @param files The list of image files to be saved.
+     * @param files     The list of image files to be saved.
      * @param productId The ID of the product that the images are associated with.
      * @return A list of {@link ImageDTO} containing metadata about the saved images.
      * @throws RuntimeException if an error occurs while reading the files or saving them to the database.
      * @since 1.0.5
      */
-    List<ImageDTO> saveImages(List<MultipartFile> files, Long productId);
+    List<ImageDTO> saveImages(Long productId, List<MultipartFile> files);
 
     /**
      * Updates an existing image with new content.

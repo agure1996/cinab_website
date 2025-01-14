@@ -1,6 +1,7 @@
 package com.gure.cinab.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class Product {
      * This field is automatically generated when a new product is persisted.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     /**
@@ -84,7 +85,8 @@ public class Product {
      * This is a one-to-many relationship, where one product can have multiple images.
      * The images are stored in a separate Image entity and are linked to the product.
      */
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonIgnore
     private List<Image> images;
 
     /**

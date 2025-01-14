@@ -16,12 +16,12 @@ public class ImageDTO {
     /**
      * The unique identifier for the image.
      */
-    private Long imageId;
+    private Long id;
 
     /**
      * The name of the image file.
      */
-    private String imageName;
+    private String fileName;
 
     /**
      * The URL used to download the image.

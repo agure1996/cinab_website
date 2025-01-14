@@ -1,5 +1,6 @@
 package com.gure.cinab.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class Category {
      * </p>
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     /**
@@ -49,6 +50,7 @@ public class Category {
      * where each product has a reference to a category.
      * </p>
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 

@@ -31,7 +31,7 @@ public class Image {
      * </p>
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     /**
@@ -57,6 +57,7 @@ public class Image {
      * </p>
      */
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private Blob image;
 
     /**

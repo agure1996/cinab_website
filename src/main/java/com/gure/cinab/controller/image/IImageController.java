@@ -23,7 +23,7 @@ public interface IImageController {
      * @param productId ID of the product to associate with the images.
      * @return A response entity containing the status of the upload operation.
      */
-    ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId);
+    ResponseEntity<ApiResponse> uploadImages( @RequestParam Long productId, @RequestParam List<MultipartFile> files);
 
     /**
      * Facilitates the download of an image by its ID.

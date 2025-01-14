@@ -1,14 +1,46 @@
 # Cinab Website - Changelog
 
-# Patch 1.0.8 - General Fixes and Updates (Current)
+# Patch Update 1.0.9 (current)
+
+**Release Date**: January 14, 2025
+
+---
+
+### **Updates & Fixes**
+
+- **Product Management**:
+    - Full CRUD functionality implemented for products (create, read, update, delete).
+    - Improved validation and error handling when fetching products by ID.
+
+- **Category Management**:
+    - Added support for product-category associations and nested categories.
+
+- **Image Handling**:
+    - Image upload functionality completed.
+    - Fixed issue where empty image fields in product responses appeared as `null`; now shown as an empty array (`[]`).
+    - Resolved `500 Internal Server Error` when retrieving uploaded images.
+
+- **General Fixes**:
+    - Improved database consistency for product-category links.
+    - Enhanced error messages and logging for better debugging.
+    - Enhanced response format consistency for API endpoints to align with the `ApiResponse` structure.
+    - Improved exception handling with clear error messages for invalid product and category operations.
+
+---
+
+### **Known Issues**
+None right now.
+
+
+# Version 1.0.8 
 
 ## Overview
 
-This patch (1.0.8) introduces several important fixes and updates to the product controller and service layer. The focus is on improving the functionality of the product endpoints, enhancing error handling, and refining the documentation for a better developer experience. This update ensures smoother product operations, better error messages, and more accurate responses when querying product data.
+Patch (1.0.8) introduced several important fixes and updates to the product controller and service layer. The focus is on improving the functionality of the product endpoints, enhancing error handling, and refining the documentation for a better developer experience. This update ensures smoother product operations, better error messages, and more accurate responses when querying product data.
 
-### Changes and Fixes:
 
-#### 1. **Endpoint Updates and Fixes**:
+
+### **Endpoint Updates and Fixes**:
 - **`getAllProducts()`**: Now returns a successful response when products are found, with a clear message in the response body.
 - **`getProductById(Long productId)`**: Fixed handling of product retrieval by ID. Now returns a 404 error message when the product is not found.
 - **`addProduct(AddProductRequest newProduct)`**: Handles the addition of new products and includes better error messages when there is a conflict (e.g., product already exists).
@@ -20,28 +52,28 @@ This patch (1.0.8) introduces several important fixes and updates to the product
 - **`getProductByName(String name)`**: Handles the retrieval of products by their name with improved error messaging when no product is found.
 - **`getProductByBrand(String brand)`**: Improved handling for products retrieved by brand name, with better error messaging when no products are found.
 
-#### 2. **Error Handling Enhancements**:
+ **Error Handling Enhancements**:
 - **Improved Error Messages**: Now provides more descriptive error messages in scenarios like "no product found" or "internal server error". These updates help developers quickly understand what went wrong during the API interaction.
 - **`ResourceNotFoundException` Handling**: Exceptions now result in clearer responses when a product cannot be found during CRUD operations (e.g., get, delete, update).
 - **Internal Server Errors**: More specific error responses for internal server errors that occur during various operations.
 
-#### 3. **JavaDocs and Documentation Updates**:
+ **JavaDocs and Documentation Updates**:
 - **Detailed Method Descriptions**: All controller methods now include in-depth descriptions of their functionality, expected parameters, and the type of response they return. This is useful for other developers interacting with the API.
 - **Enhanced Readability**: Descriptions of error handling, success messages, and expected behavior have been updated for clarity.
 
-#### 4. **API Consistency**:
+ **API Consistency**:
 - **URL and Path Cleanup**: Fixed some inconsistencies in the URL path formats, ensuring they adhere to standard naming conventions.
 - **Request Parameter Consistency**: Improved consistency in the request parameters used across different endpoints (e.g., `@PathVariable` vs. `@RequestParam`).
 
 ---
 
-### Benefits of the Update:
+# Benefits of the Update:
 - **Better Error Handling**: Clearer error messages and status codes for various error scenarios.
 - **Improved API Responses**: More consistent and meaningful success messages.
 - **Documentation**: Detailed API documentation for each method, making it easier for developers to understand and use the API.
 - **Stability**: Fixes to critical parts of the code, ensuring stable and predictable behavior when interacting with product data.
 
-### Summary:
+# Summary:
 Patch 1.0.8 includes crucial bug fixes, enhanced error handling, improved documentation, and additional functionality for the product-related endpoints. These updates ensure smoother operation, better error tracking, and an overall better developer experience.
 
 
