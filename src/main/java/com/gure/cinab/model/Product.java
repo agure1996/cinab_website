@@ -37,7 +37,7 @@ public class Product {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     /**
      * The name of the product.
