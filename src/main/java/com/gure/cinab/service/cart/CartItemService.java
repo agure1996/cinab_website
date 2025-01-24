@@ -84,15 +84,14 @@ public class CartItemService implements ICartItemService {
         Cart cart = cartService.getCart(cartId);
 
         // Find the cart item and update its quantity
-        cart.getCartItems()
-                .stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst()
-                .ifPresent(item -> {
-                    item.setQuantity(quantity); // Update the quantity
-                    item.setUnitPrice(item.getProduct().getPrice()); // Update the price per unit
-                    item.setTotalPrice(); // Recalculate the total price
-                });
+        cart.getCartItems().stream()
+                            .filter(item -> item.getProduct().getId().equals(productId))
+                            .findFirst()
+                            .ifPresent(item -> {
+                                item.setQuantity(quantity); // Update the quantity
+                                item.setUnitPrice(item.getProduct().getPrice()); // Update the price per unit
+                                item.setTotalPrice(); // Recalculate the total price
+        });
 
         // Update the cart's total amount
         BigDecimal totalAmount = cart.getTotalAmount();
@@ -106,9 +105,7 @@ public class CartItemService implements ICartItemService {
     public CartItem getCartItem(Long cartId, Long productId) {
 
         Cart cart = cartService.getCart(cartId); // Get the cart
-        return cart
-                .getCartItems()
-                .stream()
+        return cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));

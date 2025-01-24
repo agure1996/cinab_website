@@ -1,11 +1,10 @@
 package com.gure.cinab.controller.image;
 
+import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.response.ApiResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.multipart.MultipartFile;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,7 +22,7 @@ public interface IImageController {
      * @param productId ID of the product to associate with the images.
      * @return A response entity containing the status of the upload operation.
      */
-    ResponseEntity<ApiResponse> uploadImages( @RequestParam Long productId, @RequestParam List<MultipartFile> files);
+    ResponseEntity<ApiResponse> uploadImages( Long productId, List<MultipartFile> files);
 
     /**
      * Facilitates the download of an image by its ID.
@@ -32,22 +31,24 @@ public interface IImageController {
      * @return A resource containing the image data.
      * @throws SQLException If there is an error accessing the image blob from the database.
      */
-    ResponseEntity<Resource> downloadImage(@PathVariable Long imageId) throws SQLException;
+    ResponseEntity<Resource> downloadImage(Long imageId) throws SQLException;
 
     /**
      * Updates an existing image with new file data.
      *
      * @param imageId ID of the image to update.
      * @param file New file data to update the image with.
+     * @throws ResourceNotFoundException if no image with the specified ID exists.
      * @return A response entity indicating the status of the update operation.
      */
-    ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file);
+    ResponseEntity<ApiResponse> updateImage(Long imageId, MultipartFile file);
 
     /**
      * Deletes an image by its ID.
      *
      * @param imageId ID of the image to delete.
+     * @throws ResourceNotFoundException if no image with the specified ID exists.
      * @return A response entity indicating the status of the deletion operation.
      */
-    ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId);
+    ResponseEntity<ApiResponse> deleteImage(Long imageId);
 }
