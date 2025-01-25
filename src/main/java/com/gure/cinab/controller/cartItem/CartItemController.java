@@ -33,7 +33,7 @@ public class CartItemController implements ICartItemController {
 
 
     @Override
-    @DeleteMapping("/cart/${cartId}/item/${itemId}/remove")
+    @DeleteMapping("/cart/{cartId}/item/{itemId}/remove")
     public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId, @PathVariable Long itemId) {
 
         try {
@@ -46,7 +46,7 @@ public class CartItemController implements ICartItemController {
     }
 
     @Override
-    @PutMapping("/cart/${cartId}/item/${itemId}/update")
+    @PutMapping("/cart/{cartId}/item/{itemId}/update")
     public ResponseEntity<ApiResponse> updateItemQuantity(@PathVariable Long cartId,
                                                           @PathVariable Long itemId,
                                                           @RequestParam Integer quantity) {

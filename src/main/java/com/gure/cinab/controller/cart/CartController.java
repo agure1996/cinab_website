@@ -20,7 +20,7 @@ public class CartController implements ICartController {
     private final ICartService cartService;
 
     @Override
-    @GetMapping("/${cartId}/my-cart")
+    @GetMapping("/{cartId}/my-cart")
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
 
         try {
@@ -34,7 +34,7 @@ public class CartController implements ICartController {
     }
 
     @Override
-    @DeleteMapping("/${cartId}/clear")
+    @DeleteMapping("/{cartId}/clear")
     public ResponseEntity<ApiResponse> clearCart(Long cartId) {
 
         try {
@@ -47,7 +47,7 @@ public class CartController implements ICartController {
     }
 
     @Override
-    @GetMapping("/${cartId}/cart/total-price")
+    @GetMapping("/{cartId}/cart/total-price")
     public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) {
         try {
             BigDecimal totalPrice = cartService.getTotalPrice(cartId);
