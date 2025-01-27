@@ -3,6 +3,7 @@ package com.gure.cinab.controller.cartItem;
 import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.cart.ICartItemService;
+import com.gure.cinab.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController implements ICartItemController {
 
     private final ICartItemService cartItemService;
+    private final ICartService cartService;
 
 
     @Override
@@ -24,10 +26,13 @@ public class CartItemController implements ICartItemController {
                                                      @RequestParam Integer quantity) {
 
         try {
+        if(cartId == null){
+           cartId = cartService.initializeNewCart();
+        }
             cartItemService.addItemToCart(cartId, itemId, quantity);
             return ResponseEntity.ok(new ApiResponse("Adding Item Successfully!", null));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), cartId));
         }
     }
 
