@@ -39,7 +39,9 @@ public class CartItemService implements ICartItemService {
         // Check if the product already exists in the cart
         CartItem cartItem = getCartItem(cartId, productId);
 
-        if (cartItem.getId() == null) {
+        if (cartItem == null) {
+
+            cartItem = new CartItem();
             // Create a new CartItem if it doesn't already exist
             cartItem.setCart(cart); // Associate the cart with the item
             cartItem.setProduct(product); // Associate the product with the item
@@ -105,10 +107,12 @@ public class CartItemService implements ICartItemService {
     public CartItem getCartItem(Long cartId, Long productId) {
 
         Cart cart = cartService.getCart(cartId); // Get the cart
-        return cart.getCartItems().stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
-
+        if(!cart.getCartItems().isEmpty()) {
+            return cart.getCartItems().stream()
+                    .filter(item -> item.getProduct().getId().equals(productId))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
+        }
+         return null;
     }
 }

@@ -28,7 +28,8 @@ public interface ICartItemController {
      * @return a {@link ResponseEntity<ApiResponse>} containing a success message or an error message.
      * @throws ResourceNotFoundException if the cart or item with the specified ID does not exist.
      */
-    ResponseEntity<ApiResponse> addItemToCart(Long cartId, Long itemId, Integer quantity);
+//    ResponseEntity<ApiResponse> addItemToCart(Long cartId, Long itemId, Integer quantity);
+    ResponseEntity<ApiResponse> addItemToCart(String cartId, Long itemId, Integer quantity);
 
     /**
      * Removes an item from a specified cart.
