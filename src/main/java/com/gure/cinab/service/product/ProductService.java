@@ -10,9 +10,9 @@ import com.gure.cinab.model.Product;
 import com.gure.cinab.repository.CategoryRepository;
 import com.gure.cinab.repository.ImageRepository;
 import com.gure.cinab.repository.ProductRepository;
-import com.gure.cinab.request.AddProductRequest;
+import com.gure.cinab.request.product.AddProductRequest;
 
-import com.gure.cinab.request.ProductUpdateRequest;
+import com.gure.cinab.request.product.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

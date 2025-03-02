@@ -1,8 +1,8 @@
 package com.gure.cinab.controller.product;
 
 import com.gure.cinab.exceptions.ResourceNotFoundException;
-import com.gure.cinab.request.AddProductRequest;
-import com.gure.cinab.request.ProductUpdateRequest;
+import com.gure.cinab.request.product.AddProductRequest;
+import com.gure.cinab.request.product.ProductUpdateRequest;
 import com.gure.cinab.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 

@@ -2,8 +2,8 @@ package com.gure.cinab.service.product;
 
 import com.gure.cinab.dto.ProductDTO;
 import com.gure.cinab.model.Product;
-import com.gure.cinab.request.AddProductRequest;
-import com.gure.cinab.request.ProductUpdateRequest;
+import com.gure.cinab.request.product.AddProductRequest;
+import com.gure.cinab.request.product.ProductUpdateRequest;
 
 import java.util.List;
 

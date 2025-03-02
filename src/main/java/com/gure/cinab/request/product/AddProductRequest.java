@@ -1,4 +1,4 @@
-package com.gure.cinab.request;
+package com.gure.cinab.request.product;
 
 import com.gure.cinab.model.Category;
 import lombok.Data;

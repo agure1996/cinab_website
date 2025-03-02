@@ -2,8 +2,10 @@ package com.gure.cinab.service.cart;
 
 import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.model.Cart;
+import com.gure.cinab.model.Order;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Provides an interface for managing shopping cart operations.
@@ -47,4 +49,7 @@ public interface ICartService {
      * @return the unique identifier of the newly created cart
      */
     Long initializeNewCart();
+
+
+    Cart getCartByUserId(Long userId);
 }

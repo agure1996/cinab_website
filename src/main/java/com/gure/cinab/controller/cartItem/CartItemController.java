@@ -34,7 +34,7 @@ public class CartItemController implements ICartItemController {
                 requestCartId = Long.parseLong(cartId);
             }
             cartItemService.addItemToCart(requestCartId, itemId, quantity);
-            return ResponseEntity.ok(new ApiResponse("Adding Item Successfully!", null));
+            return ResponseEntity.ok(new ApiResponse("Added Item to Cart!", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), requestCartId));
         }
