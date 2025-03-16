@@ -23,7 +23,7 @@ public interface IOrderService {
      * @param orderId the ID of the order to retrieve
      * @return the Order object if found
      */
-    Order getOrder(Long orderId);
+    OrderDTO getOrder(Long orderId);
     /**
      * Retrieves an order by user id.
      *

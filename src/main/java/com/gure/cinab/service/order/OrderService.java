@@ -11,6 +11,7 @@ import com.gure.cinab.repository.OrderRepository;
 import com.gure.cinab.repository.ProductRepository;
 import com.gure.cinab.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ICartService cartService;
-
+    private final ModelMapper modelMapper;
 
 
     //helper methods below are used for placing order
@@ -39,12 +40,9 @@ public class OrderService implements IOrderService {
         order.setOrderItems(new HashSet<>(orderItemList));
         order.setTotalAmount(calculateTotalAmount(orderItemList));
         Order saveOrder = orderRepository.save(order);
-
         cartService.clearCart(cart.getId());
-
         return saveOrder;
     }
-
 
     private Order createOrder(Cart cart) {
         Order order = new Order();
@@ -55,43 +53,36 @@ public class OrderService implements IOrderService {
     }
 
     private List<OrderItem> createOrderItems(Order order, Cart cart) {
-        return cart.getCartItems().stream()
-                .map(cartItem -> {
-                    Product product = cartItem.getProduct();
-                    product.setInventory(product.getInventory() - cartItem.getQuantity());
-                    productRepository.save(product);
-
-                    return new OrderItem(
-                            order,
-                            product,
-                            cartItem.getQuantity(),
-                            cartItem.getUnitPrice());
-                }).toList();
+        return cart.getCartItems().stream().map(cartItem -> {
+            Product product = cartItem.getProduct();
+            product.setInventory(product.getInventory() - cartItem.getQuantity());
+            productRepository.save(product);
+            return new OrderItem(order, product, cartItem.getQuantity(), cartItem.getUnitPrice());
+        }).toList();
     }
 
     private BigDecimal calculateTotalAmount(List<OrderItem> orderItemList) {
 
         return orderItemList.stream()
                 .map(item -> item.getPrice()
-                        .multiply(new BigDecimal(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                        .multiply(new BigDecimal(item.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
-    public Order getOrder(Long orderId) {
+    public OrderDTO getOrder(Long orderId) {
         return orderRepository.findById(orderId)
+                .map(this::convertToDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
     @Override
-    public List<OrderDTO> getUserOrders(Long userId){
+    public List<OrderDTO> getUserOrders(Long userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
-//        return  orders.stream().map(this :: convertToDTO).toList();
-        return null;
+        return orders.stream().map(this::convertToDTO).toList();
     }
-//
-//    private Object convertToDTO(Order order) {
-//        return modelMapper.map(order, OrderDTO.class);
-//    }
+
+    private OrderDTO convertToDTO(Order order) {
+        return modelMapper.map(order, OrderDTO.class);
+    }
 
 }
