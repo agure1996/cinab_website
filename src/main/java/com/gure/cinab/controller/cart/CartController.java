@@ -23,12 +23,8 @@ public class CartController implements ICartController {
     @GetMapping("/{cartId}/my-cart")
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
 
-
         try {
-
-
             Cart cart = cartService.getCart(cartId);
-
             return ResponseEntity.ok(new ApiResponse("Success!", cart));
 
         } catch (ResourceNotFoundException e) {
@@ -38,7 +34,7 @@ public class CartController implements ICartController {
 
     @Override
     @DeleteMapping("/{cartId}/clear")
-    public ResponseEntity<ApiResponse> clearCart(@PathVariable  Long cartId) {
+    public ResponseEntity<ApiResponse> clearCart(@PathVariable Long cartId) {
 
         try {
             cartService.clearCart(cartId);

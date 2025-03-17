@@ -1,9 +1,12 @@
 package com.gure.cinab.controller.cartItem;
 
 import com.gure.cinab.exceptions.ResourceNotFoundException;
+import com.gure.cinab.model.Cart;
+import com.gure.cinab.model.User;
 import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.cart.ICartItemService;
 import com.gure.cinab.service.cart.ICartService;
+import com.gure.cinab.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,24 +19,22 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController implements ICartItemController {
 
     private final ICartItemService cartItemService;
+    private final IUserService userService;
     private final ICartService cartService;
 
 
     @Override
     @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam String cartId,
-                                                     @RequestParam Long itemId,
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long itemId,
                                                      @RequestParam Integer quantity) {
 
         Long requestCartId =0L;
         try {
-            if(cartId == null || cartId.isEmpty()){
-                requestCartId = cartService.initializeNewCart();
-            }
-            else {
-                requestCartId = Long.parseLong(cartId);
-            }
-            cartItemService.addItemToCart(requestCartId, itemId, quantity);
+                User user = userService.getUserById(1L);
+                Cart cart = cartService.initializeNewCart(user);
+
+
+            cartItemService.addItemToCart(cart.getId(), itemId, quantity);
             return ResponseEntity.ok(new ApiResponse("Added Item to Cart!", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), requestCartId));

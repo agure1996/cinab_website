@@ -1,5 +1,6 @@
 package com.gure.cinab.service.user;
 
+import com.gure.cinab.dto.UserDTO;
 import com.gure.cinab.exceptions.AlreadyExistsException;
 import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.model.User;
@@ -7,6 +8,7 @@ import com.gure.cinab.repository.UserRepository;
 import com.gure.cinab.request.user.CreateUserRequest;
 import com.gure.cinab.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public User getUserById(Long userId) {
@@ -56,5 +59,10 @@ public class UserService implements IUserService {
                         () -> {
                             throw new ResourceNotFoundException("User not found");
                         });
+    }
+
+    @Override
+    public UserDTO convertUserToDTO(User user){
+       return modelMapper.map(user, UserDTO.class);
     }
 }

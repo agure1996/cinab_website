@@ -1,6 +1,7 @@
 package com.gure.cinab.controller.order;
 
 import com.gure.cinab.dto.OrderDTO;
+import com.gure.cinab.model.Order;
 import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.order.IOrderService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,10 @@ public class OrderController implements IOrderController {
     @Override
     public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
         try {
-            OrderDTO order = orderService.getOrder(userId);
-            return ResponseEntity.ok(new ApiResponse("Item Ordered Successfully!", order));
+            Order order = orderService.placeOrder(userId);
+            //convert the order to a orderDTO
+            OrderDTO orderDTO = orderService.convertOrderToDTO(order);
+            return ResponseEntity.ok(new ApiResponse("Item Ordered Successfully!", orderDTO));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error Occurred!", e.getMessage()));

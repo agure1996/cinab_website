@@ -1,5 +1,6 @@
 package com.gure.cinab.service.user;
 
+import com.gure.cinab.dto.UserDTO;
 import com.gure.cinab.model.User;
 import com.gure.cinab.request.user.CreateUserRequest;
 import com.gure.cinab.request.user.UpdateUserRequest;
@@ -10,4 +11,6 @@ public interface IUserService {
     User createUser(CreateUserRequest request);
     User updateUser(UpdateUserRequest request, Long userId);
     void deleteUser(Long userId);
+
+    UserDTO convertUserToDTO(User user);
 }

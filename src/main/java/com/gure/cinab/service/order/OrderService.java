@@ -71,17 +71,18 @@ public class OrderService implements IOrderService {
     @Override
     public OrderDTO getOrder(Long orderId) {
         return orderRepository.findById(orderId)
-                .map(this::convertToDTO)
+                .map(this::convertOrderToDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
     @Override
     public List<OrderDTO> getUserOrders(Long userId) {
         List<Order> orders = orderRepository.findByUserId(userId);
-        return orders.stream().map(this::convertToDTO).toList();
+        return orders.stream().map(this::convertOrderToDTO).toList();
     }
 
-    private OrderDTO convertToDTO(Order order) {
+    @Override
+    public OrderDTO convertOrderToDTO(Order order) {
         return modelMapper.map(order, OrderDTO.class);
     }
 

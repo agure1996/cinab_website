@@ -31,4 +31,6 @@ public interface IOrderService {
      * @return list of Orders if found
      */
     List<OrderDTO> getUserOrders(Long userId);
+
+    OrderDTO convertOrderToDTO(Order order);
 }

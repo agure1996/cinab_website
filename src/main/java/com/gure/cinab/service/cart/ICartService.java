@@ -3,6 +3,7 @@ package com.gure.cinab.service.cart;
 import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.model.Cart;
 import com.gure.cinab.model.Order;
+import com.gure.cinab.model.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -44,12 +45,12 @@ public interface ICartService {
     BigDecimal getTotalPrice(Long id);
 
     /**
-     * Initializes a new shopping cart and assigns it a unique identifier.
+     * Initializes a new shopping cart and assigns it the relative User.
      *
-     * @return the unique identifier of the newly created cart
+     * @return the newly created cart
      */
-    Long initializeNewCart();
 
+    Cart initializeNewCart(User user);
 
     Cart getCartByUserId(Long userId);
 }
