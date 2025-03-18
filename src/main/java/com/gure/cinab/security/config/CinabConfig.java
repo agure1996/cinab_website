@@ -1,4 +1,4 @@
-package com.gure.cinab.config;
+package com.gure.cinab.security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

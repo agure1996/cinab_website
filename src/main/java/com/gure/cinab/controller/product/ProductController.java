@@ -1,13 +1,14 @@
 package com.gure.cinab.controller.product;
 
 import com.gure.cinab.dto.ProductDTO;
+import com.gure.cinab.exceptions.AlreadyExistsException;
 import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.model.Product;
 import com.gure.cinab.request.product.AddProductRequest;
 import com.gure.cinab.request.product.ProductUpdateRequest;
 import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.product.IProductService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,12 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@AllArgsConstructor
-
+@RequiredArgsConstructor
 @RequestMapping("${api.prefix}/products")  // API endpoint with versioning or prefix
 public class ProductController implements IProductController {
 
@@ -35,9 +34,7 @@ public class ProductController implements IProductController {
         try {
             List<Product> productsList = productService.getAllProducts();  // Fetching all products
             List<ProductDTO> convertedProducts = productService.getConvertedProducts(productsList);  // Fetching all products
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                    .body(new ApiResponse("Found products!", convertedProducts));  // Successful response
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new ApiResponse("Found products!", convertedProducts));  // Successful response
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));  // Handling error if products not found
         } catch (Exception e) {
@@ -66,17 +63,19 @@ public class ProductController implements IProductController {
         try {
             Product theNewProduct = productService.addProduct(newProduct);  // Adding new product
             return ResponseEntity.ok(new ApiResponse("Product added successfully! ", theNewProduct));  // Successful addition
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));  // Handling generic errors
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));  // Handling generic errors
         }
     }
 
-    @Override
     @PutMapping("/product/{productId}/update")
-    public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest product) {
+    @Override
+    public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest productUpdateRequest, @PathVariable Long productId) {
         try {
             // Updating product details
-            Product updatedProduct = productService.updateProduct(product, productId);
+            Product updatedProduct = productService.updateProduct(productUpdateRequest, productId);
             ProductDTO convertedProduct = productService.convertToDTO(updatedProduct);
             // Return the updated product details
             return ResponseEntity.ok(new ApiResponse("Updated product successfully!", convertedProduct));  // Successful update
