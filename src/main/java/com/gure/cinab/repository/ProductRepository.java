@@ -67,4 +67,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @return the number of products matching the specified brand and name
      */
     Long countByBrandAndName(String brand, String name);
+
+
+    /**
+     * Checks if a product exists by name or brand
+     *
+     * @param name  the name of the products
+     * @param brand the brand of the products
+     * @return true if product exists by name or brand
+     */
+    boolean existsByNameAndBrand(String name, String brand);
 }

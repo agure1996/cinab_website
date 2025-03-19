@@ -1,10 +1,14 @@
 package com.gure.cinab.controller.product;
 
 import com.gure.cinab.exceptions.ResourceNotFoundException;
-import com.gure.cinab.request.AddProductRequest;
-import com.gure.cinab.request.ProductUpdateRequest;
+import com.gure.cinab.request.product.AddProductRequest;
+import com.gure.cinab.request.product.ProductUpdateRequest;
 import com.gure.cinab.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * The interface defining the contract for handling product-related HTTP operations.
@@ -48,12 +52,13 @@ public interface IProductController {
     /**
      * Update an existing product's information.
      *
-     * @param id      the unique ID of the product to update; must not be null.
-     * @param product the new details to update the product with, provided in a {@link ProductUpdateRequest} object; must not be null.
+     * @param productId      the unique ID of the product to update; must not be null.
+     * @param productUpdateRequest the new details to update the product with, provided in a {@link ProductUpdateRequest} object; must not be null.
      * @return a {@link ResponseEntity<ApiResponse>} containing the success message and updated product details.
      * @throws ResourceNotFoundException if no product with the specified ID exists.
      */
-    ResponseEntity<ApiResponse> updateProduct(Long id, ProductUpdateRequest product);
+  ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest productUpdateRequest, @PathVariable Long productId);
+
 
     /**
      * Delete a product by its unique ID.

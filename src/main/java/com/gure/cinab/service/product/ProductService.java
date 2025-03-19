@@ -2,6 +2,7 @@ package com.gure.cinab.service.product;
 
 import com.gure.cinab.dto.ImageDTO;
 import com.gure.cinab.dto.ProductDTO;
+import com.gure.cinab.exceptions.AlreadyExistsException;
 import com.gure.cinab.exceptions.ResourceNotFoundException;
 import com.gure.cinab.model.Category;
 import com.gure.cinab.model.Image;
@@ -10,9 +11,9 @@ import com.gure.cinab.model.Product;
 import com.gure.cinab.repository.CategoryRepository;
 import com.gure.cinab.repository.ImageRepository;
 import com.gure.cinab.repository.ProductRepository;
-import com.gure.cinab.request.AddProductRequest;
+import com.gure.cinab.request.product.AddProductRequest;
 
-import com.gure.cinab.request.ProductUpdateRequest;
+import com.gure.cinab.request.product.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,12 @@ public class ProductService implements IProductService {
 
     @Override
     public Product addProduct(AddProductRequest request) {
+
+        //check if product exists!
+        if(checkIfProductExists(request.getName(),request.getBrand())){
+            throw new AlreadyExistsException(request.getBrand() + " " + request.getBrand()+" already exists!");
+        }
+
         //Check to see if category is found in db
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
@@ -50,6 +57,11 @@ public class ProductService implements IProductService {
         request.setCategory(category);
         //if no then save it as a new category then set it as new product category
         return productRepository.save(createProduct(request, category));
+    }
+
+    private boolean checkIfProductExists(String name, String brand) {
+
+        return productRepository.existsByNameAndBrand(name,brand);
     }
 
     /**

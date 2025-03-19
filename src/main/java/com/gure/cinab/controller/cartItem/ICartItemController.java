@@ -22,14 +22,14 @@ public interface ICartItemController {
     /**
      * Adds an item to a specified cart.
      *
-     * @param cartId   the unique ID of the cart to which the item will be added; must not be null.
+//     * @param cartId   the unique ID of the cart to which the item will be added; must not be null.
      * @param itemId   the unique ID of the item to add; must not be null.
      * @param quantity the quantity of the item to add; must not be null or negative.
      * @return a {@link ResponseEntity<ApiResponse>} containing a success message or an error message.
      * @throws ResourceNotFoundException if the cart or item with the specified ID does not exist.
      */
 //    ResponseEntity<ApiResponse> addItemToCart(Long cartId, Long itemId, Integer quantity);
-    ResponseEntity<ApiResponse> addItemToCart(String cartId, Long itemId, Integer quantity);
+    ResponseEntity<ApiResponse> addItemToCart(Long itemId, Integer quantity);
 
     /**
      * Removes an item from a specified cart.
