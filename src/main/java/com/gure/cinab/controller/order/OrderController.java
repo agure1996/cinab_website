@@ -7,6 +7,8 @@ import com.gure.cinab.service.order.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +17,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/orders")
+@EnableMethodSecurity()
 public class OrderController implements IOrderController {
 
     private final IOrderService orderService;
 
     @PostMapping("/order")
     @Override
+    @PreAuthorize("hasRole('ADMIN_ROLE') or hasRole('CUSTOMER_ROLE')")
     public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
         try {
             Order order = orderService.placeOrder(userId);

@@ -10,9 +10,10 @@ import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/products")  // API endpoint with versioning or prefix
+@EnableMethodSecurity()
 public class ProductController implements IProductController {
 
 
@@ -38,7 +40,7 @@ public class ProductController implements IProductController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));  // Handling error if products not found
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Unexpected error: " + e.getMessage(), null));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Unexpected error: " + e.getMessage(), null));
         }
     }
 
@@ -53,11 +55,12 @@ public class ProductController implements IProductController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));  // Handling error if product not found
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Unexpected error: " + e.getMessage(), null));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Unexpected error: " + e.getMessage(), null));
         }
     }
 
     @Override// Temporarily remove restriction
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest newProduct) {
         try {
@@ -69,7 +72,7 @@ public class ProductController implements IProductController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));  // Handling generic errors
         }
     }
-
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @PutMapping("/product/{productId}/update")
     @Override
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest productUpdateRequest, @PathVariable Long productId) {
@@ -85,6 +88,7 @@ public class ProductController implements IProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @Override
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {

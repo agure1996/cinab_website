@@ -6,6 +6,8 @@ import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/categories")
+@EnableMethodSecurity()
 public class CategoryController implements ICategoryController {
 
     private final ICategoryService categoryService; // Dependency injection for category service
@@ -35,6 +38,7 @@ public class CategoryController implements ICategoryController {
 
     @Override
     @PostMapping("/category/add")
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category name) {
         try {
             // Add a new category
@@ -77,6 +81,7 @@ public class CategoryController implements ICategoryController {
 
     @Override
     @DeleteMapping("/category/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) {
         try {
             // Delete the category by ID
@@ -91,6 +96,7 @@ public class CategoryController implements ICategoryController {
 
     @Override
     @PutMapping("/category/{id}/update")
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         try {
             // Update the category details

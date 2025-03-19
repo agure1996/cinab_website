@@ -10,6 +10,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,10 +29,12 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api.prefix}/images")
+@EnableMethodSecurity()
 public class ImageController implements IImageController {
 
     private final IImageService imageService;
 
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @Override
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> uploadImages(@RequestParam Long productId, @RequestParam List<MultipartFile> files ) {
@@ -49,6 +53,7 @@ public class ImageController implements IImageController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @Override
     @Transactional
     @GetMapping("/image/download/{imageId}")
@@ -76,6 +81,7 @@ public class ImageController implements IImageController {
                 .body(resource);
     }
 
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @Override
     @PutMapping("/image/{imageId}/update")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {

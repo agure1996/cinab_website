@@ -10,6 +10,7 @@ import com.gure.cinab.response.ApiResponse;
 import com.gure.cinab.service.user.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
@@ -23,6 +24,7 @@ public class UserController implements IUserController {
     private final IUserService userService;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @GetMapping("/{userId}/user")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         try {
@@ -37,6 +39,7 @@ public class UserController implements IUserController {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @PostMapping("/create-user")
     public ResponseEntity<ApiResponse> createUser(@RequestBody CreateUserRequest request) {
         try {
@@ -51,6 +54,7 @@ public class UserController implements IUserController {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @PutMapping("/{userId}/update")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UpdateUserRequest request,
                                                   @PathVariable Long userId) {
@@ -65,6 +69,7 @@ public class UserController implements IUserController {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN_ROLE')")
     @DeleteMapping("/{userId}/delete")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId) {
         try {

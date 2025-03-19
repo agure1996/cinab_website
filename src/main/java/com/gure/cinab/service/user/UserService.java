@@ -9,6 +9,9 @@ import com.gure.cinab.request.user.CreateUserRequest;
 import com.gure.cinab.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +23,7 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(Long userId) {
@@ -33,10 +37,10 @@ public class UserService implements IUserService {
                 .filter(user -> !userRepository.existsByEmail(request.getEmail()))
                 .map(req -> {
                     User newUser = new User();
-                    newUser.setEmail(request.getEmail());
-                    newUser.setPassword(req.getPassword());
+                    newUser.setEmail(req.getEmail());
+                    newUser.setPassword(passwordEncoder.encode(req.getPassword()));
                     newUser.setFirstName(req.getFirstName());
-                    newUser.setLastName(request.getLastName());
+                    newUser.setLastName(req.getLastName());
                     return userRepository.save(newUser);
                 })
                 .orElseThrow(() -> new AlreadyExistsException(request.getEmail() + " already exists!"));
@@ -62,7 +66,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO convertUserToDTO(User user){
-       return modelMapper.map(user, UserDTO.class);
+    public UserDTO convertUserToDTO(User user) {
+        return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userRepository.findByEmail(email);
     }
 }
